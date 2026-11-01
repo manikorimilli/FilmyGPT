@@ -11,14 +11,17 @@ const gptSlice = createSlice({
     toogleGPT: (state, action) => {
       state.toogleGPTSearch = !state.toogleGPTSearch;
     },
+    closeGPT: (state, action) => {
+      state.toogleGPTSearch = false;
+    },
     addGPTMovies: (state, action) => {
       state.gptRecommendedMovies = action.payload;
     },
-    toogleShimmerUI: (state, action) => {
-      state.shimmerUI = !state.shimmerUI;
+    setShimmerUI: (state, action) => {
+      state.shimmerUI = action.payload;
     },
   },
 });
 
-export const { toogleGPT, addGPTMovies, toogleShimmerUI } = gptSlice.actions;
+export const { toogleGPT, closeGPT, addGPTMovies, setShimmerUI } = gptSlice.actions;
 export default gptSlice.reducer;

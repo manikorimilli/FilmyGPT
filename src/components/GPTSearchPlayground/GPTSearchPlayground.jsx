@@ -7,9 +7,11 @@ import GPTMovies from '../GPTMovies/GPTMovies'
 const GPTSearchPlayground = () => {
   return (
     <div className='gpt-search-ground'>
-        <GPTSearch/>
-        <GPTMovies/>
-        
+      <div className='gpt-search-bg' aria-hidden='true'></div>
+      <div className='gpt-search-content'>
+        <GPTSearch />
+        <GPTMovies />
+      </div>
     </div>
   )
 }

@@ -1,26 +1,28 @@
-import React, { useEffect } from 'react'
-import { API_OPTIONS } from '../utils/constants';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react'
+import { API_OPTIONS } from "../utils/constants"
+import { useDispatch, useSelector } from 'react-redux'
 import { addTopRatedMovies } from '../redux/moviesSlice';
 
 const useTopRatedMovies = () => {
 
-    const dispatch=useDispatch();
+  const dispatch = useDispatch();
+  const movies = useSelector(store => store.movies.topRatedMovies);
 
-    const getTopRatedMoviesData=async()=>{
-        const data=await fetch('https://api.themoviedb.org/3/movie/top_rated?page=1',API_OPTIONS);
-        const json=await data.json();
-        dispatch(addTopRatedMovies(json.results));
+  useEffect(() => {
+    // already loaded, e.g. when coming back from GPT search or the watch page
+    if (movies) return;
 
+    const getMoviesData = async () => {
+      try {
+        const data = await fetch('https://api.themoviedb.org/3/movie/top_rated?page=1', API_OPTIONS);
+        const json = await data.json();
+        dispatch(addTopRatedMovies(json?.results || []));
+      } catch (error) {
+        dispatch(addTopRatedMovies([]));
+      }
     }
-
-    useEffect(()=>{
-        getTopRatedMoviesData();
-
-    },[]);
-  return (
-    <div>useTopRatedMovies</div>
-  )
+    getMoviesData();
+  }, [movies, dispatch]);
 }
 
-export default useTopRatedMovies
+export default useTopRatedMovies;

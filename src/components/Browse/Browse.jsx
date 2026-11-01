@@ -8,9 +8,7 @@ import usePopularMovies from '../../hooks/usePopularMovies'
 import useTopRatedMovies from '../../hooks/useTopRatedMovies'
 import useUpComingMovies from '../../hooks/useUpComingMovies'
 import GPTSearchPlayground from '../GPTSearchPlayground/GPTSearchPlayground'
-import { useDispatch, useSelector } from 'react-redux'
-import { Outlet } from "react-router-dom";
-import { removeWatchPlayerVideo } from '../../redux/moviesSlice'
+import { useSelector } from 'react-redux'
 
 
 const Browse = () => {
@@ -18,23 +16,21 @@ const Browse = () => {
   usePopularMovies();
   useTopRatedMovies();
   useUpComingMovies();
-  
 
-  const gptView=useSelector(store=>store.gpt.toogleGPTSearch);
+  const gptView = useSelector(store => store.gpt.toogleGPTSearch);
 
   return (
     <div className='browse'>
-      <Header/>
-      
-     {
-     gptView ?  <GPTSearchPlayground/> :
-     <>
-     <PrimaryBrowse/>
-     <SecondaryBrowse/>
-     </>
-     }
-      
-      
+      <Header />
+
+      {
+        gptView ? <GPTSearchPlayground /> :
+          <>
+            <PrimaryBrowse />
+            <SecondaryBrowse />
+          </>
+      }
+
     </div>
   )
 }

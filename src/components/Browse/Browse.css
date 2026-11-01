@@ -1,3 +1,4 @@
-.browse{
-    background: #000;
+.browse {
+    min-height: 100vh;
+    background: var(--bg);
 }

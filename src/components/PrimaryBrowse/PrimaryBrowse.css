@@ -1,0 +1,25 @@
+.primary-browse {
+    --hero-h: clamp(480px, 56.25vw, 92vh);
+    position: relative;
+    width: 100%;
+    height: var(--hero-h);
+    overflow: hidden;
+    background: var(--bg);
+}
+
+.hero-skeleton {
+    background: linear-gradient(100deg, #111116 30%, #1a1a21 50%, #111116 70%);
+    background-size: 200% 100%;
+    animation: hero-shimmer 1.6s linear infinite;
+}
+
+.hero-empty {
+    height: calc(var(--header-h) + 40px);
+}
+
+
+@media (max-width: 768px) {
+    .primary-browse {
+        --hero-h: max(70vh, 460px);
+    }
+}

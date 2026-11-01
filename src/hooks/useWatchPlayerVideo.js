@@ -1,31 +1,43 @@
-import React from 'react'
-import { useDispatch } from 'react-redux';
-import { addWatchPlayerVideo } from '../redux/moviesSlice';
-import {API_OPTIONS} from "../utils/constants"
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { addWatchMovieDetails, addWatchPlayerVideo, removeWatchPlayerVideo } from '../redux/moviesSlice';
+import { API_OPTIONS } from "../utils/constants"
+import { pickTrailer } from '../utils/trailer';
 
+// Loads the trailer and details for the movie in the URL.
+// Returns nothing; components read the results from the store.
 const useWatchPlayerVideo = (id) => {
 
-    const dispatch=useDispatch();
-    
+    const dispatch = useDispatch();
 
-    const getWatchPlayerData=async()=>{
-        const data=await fetch(`https://api.themoviedb.org/3/movie/${id}/videos`,API_OPTIONS);
-        const json=await data.json();
-        const Data=json.results;
-        if(!Data) return;
-        const trailerVideo = Data.filter((res) => res.type === 'Trailer');
-        const trailer= trailerVideo.length ? trailerVideo[0] : json?.results[0];
-        dispatch(addWatchPlayerVideo(trailer));
-    }
+    useEffect(() => {
+        let cancelled = false;
+        // clear the previous movie so its trailer never flashes on the next one
+        dispatch(removeWatchPlayerVideo());
 
-    useEffect(()=>{
+        const getWatchPlayerData = async () => {
+            try {
+                const [videosRes, detailsRes] = await Promise.all([
+                    fetch(`https://api.themoviedb.org/3/movie/${id}/videos`, API_OPTIONS),
+                    fetch(`https://api.themoviedb.org/3/movie/${id}`, API_OPTIONS),
+                ]);
+                const [videos, details] = await Promise.all([videosRes.json(), detailsRes.json()]);
+                if (cancelled) return;
+                // false (not null) marks "loaded, but no trailer"
+                dispatch(addWatchPlayerVideo(pickTrailer(videos.results) || false));
+                dispatch(addWatchMovieDetails(details?.id ? details : false));
+            } catch (error) {
+                if (cancelled) return;
+                dispatch(addWatchPlayerVideo(false));
+                dispatch(addWatchMovieDetails(false));
+            }
+        }
         getWatchPlayerData();
-    },[]);
 
-  return (
-    <div>useWatchPlayerVideo</div>
-  )
+        return () => {
+            cancelled = true;
+        };
+    }, [id, dispatch]);
 }
 
 export default useWatchPlayerVideo;

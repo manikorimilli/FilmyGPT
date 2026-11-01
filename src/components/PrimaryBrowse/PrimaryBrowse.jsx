@@ -3,21 +3,21 @@ import "./PrimaryBrowse.css"
 import VideoTitle from '../VideoTitle/VideoTitle'
 import VideoBackground from '../VideoBackground/VideoBackground'
 import { useSelector } from 'react-redux'
-import useMovieTrailer from '../../hooks/useMovieTrailer'
 
 const PrimaryBrowse = () => {
 
-  const movieData=useSelector(store=>store.movies.nowPlayingMovies);
-  if(!movieData) return; //return for Initial rendering
+  const movieData = useSelector(store => store.movies.nowPlayingMovies);
 
-  const {original_title,id}=movieData[0];
- 
+  //skeleton for Initial rendering
+  if (!movieData) return <div className='primary-browse hero-skeleton'></div>;
+  if (!movieData.length) return <div className='primary-browse hero-empty'></div>;
 
- 
+  const movie = movieData[0];
+
   return (
     <div className='primary-browse'>
-        <VideoTitle title={original_title} id={id}/>
-        <VideoBackground id={id}/>
+      <VideoBackground id={movie.id} backdrop={movie.backdrop_path} />
+      <VideoTitle movie={movie} />
     </div>
   )
 }

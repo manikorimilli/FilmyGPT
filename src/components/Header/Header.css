@@ -1,65 +1,206 @@
 .browse-header {
-    position: absolute; 
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%; 
-    height: 70px; 
-    cursor: pointer;
-    z-index: 20;
-    /* border: solid green 1px; */
-
-
-    /* border: solid red 2px; */
-}
-
-/* Style for the logo */
-.logo-image {
+    right: 0;
+    height: var(--header-h);
+    padding: 0 var(--gutter);
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+    transition: background 0.3s var(--ease), box-shadow 0.3s;
 }
 
-/* Ensure the logo fits properly */
+.browse-header.is-scrolled {
+    background: rgba(8, 8, 11, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 1px 0 var(--border);
+}
+
+.logo-button {
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+}
+
+.logo-button:disabled {
+    cursor: default;
+}
+
 .logo {
-    width: 120px; /* Adjust based on design needs */
+    width: clamp(104px, 11vw, 136px);
     height: auto;
 }
 
-.profile-img{
-    padding: 10px;
+.header-actions {
     display: flex;
-    justify-content: end;
     align-items: center;
-    gap: 15px;
-   
+    gap: 14px;
 }
-.gpt-search-btn{
-    background: linear-gradient(90deg, #ff6a00, #ee0979); /* Beautiful gradient */
-    border: none;
-    color: white;
-    padding: 10px 16px;
+
+.header-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s var(--ease), filter 0.2s;
+}
+
+.header-pill:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.header-pill.is-accent {
+    border-color: transparent;
+    background: linear-gradient(100deg, var(--accent-start), var(--accent-end));
+    box-shadow: 0 6px 20px rgba(238, 9, 121, 0.35);
+}
+
+.header-pill.is-accent:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.header-pill svg {
+    font-size: 16px;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+}
+
+.profile-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.chevron {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: transform 0.2s var(--ease);
+}
+
+.chevron.is-open {
+    transform: rotate(180deg);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 240px;
+    padding: 8px;
+    background: rgba(18, 18, 24, 0.97);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(14px);
+    animation: dropdown-in 0.18s var(--ease);
+}
+
+@keyframes dropdown-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+}
+
+.profile-info img {
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0px 4px 10px rgba(255, 105, 180, 0.3);
-
-}
-.gpt-search-btn:hover{
-        background: linear-gradient(90deg, #ee0979, #ff6a00); /* Reverse gradient on hover */
-        transform: scale(1.05); /* Slight enlargement */
-        box-shadow: 0px 6px 15px rgba(255, 105, 180, 0.4);
-}
-.profile-icon{
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 8px;
-    object-fit: cover; /* Ensures image maintains aspect ratio */
-    transition: transform 0.2s ease-in-out;
+    object-fit: cover;
 }
 
-
-.profile-icon:hover {
-    transform: scale(1.1); /* Slight zoom effect on hover */
+.profile-info div {
+    min-width: 0;
 }
 
+.profile-name {
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: capitalize;
+}
+
+.profile-email {
+    color: var(--text-muted);
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 170px;
+}
+
+.dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.dropdown-item:hover {
+    background: var(--surface-hover);
+}
+
+.dropdown-item svg {
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    :root {
+        --header-h: 64px;
+    }
+
+    .header-pill {
+        width: 40px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .header-pill span {
+        display: none;
+    }
+
+    .chevron {
+        display: none;
+    }
+}

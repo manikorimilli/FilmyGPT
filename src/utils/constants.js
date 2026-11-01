@@ -8,3 +8,7 @@ export const API_OPTIONS = {
 
   export const MOVIE_IMG_CDN="https://image.tmdb.org/t/p/w440_and_h660_face/";
 
+
+  export const MOVIE_BACKDROP_CDN="https://image.tmdb.org/t/p/original";
+
+  export const MOVIE_BACKDROP_MEDIUM_CDN="https://image.tmdb.org/t/p/w1280";

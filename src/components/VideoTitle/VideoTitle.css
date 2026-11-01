@@ -1,90 +1,99 @@
 .video-title {
     position: absolute;
-    top: 60%;                    /* Keep original position */
-    left: 5px;                   /* Keep original position */
-    transform: translateY(-50%);   /* Keep original centering */
-    width: 400px;                 /* Keep original width */
-    z-index: 10;                  /* Ensure it's above the video */
-    padding: 20px;                /* More padding for a cleaner look */
-    /* background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));  */
-    color: white;                 /* Keep white text */
-    border-radius: 10px;          /* Softer rounded corners */
-    /* box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);  */
-   
+    left: var(--gutter);
+    bottom: 28%;
+    z-index: 10;
+    width: min(560px, calc(100% - 2 * var(--gutter)));
+    color: var(--text);
+    animation: hero-text-in 0.8s var(--ease);
 }
 
-/* Title Styling */
+@keyframes hero-text-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+.hero-badge {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: var(--brand);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
 .video-title h2 {
-    font-size: 30px;              /* Slightly larger font */
-    font-weight: bold;
-    margin-bottom: 15px;
-    letter-spacing: 1.2px;        /* More spacing for readability */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Soft text shadow */
+    font-size: clamp(2rem, 4.4vw, 4rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
 }
 
-/* Buttons Container */
-.video-title div {
-    display: flex;
-    gap: 12px; /* Space between buttons */
-}
-
-/* Button Styling */
-.video-title button {
-    background-color: #e50914; /* Netflix-style red */
-    color: white;
-    border: none;
-    padding: 12px 22px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+.hero-meta {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
 }
 
-/* Play Button Hover */
-.video-title button:hover {
-    background-color: #b20710;
-    transform: scale(1.07);
+.hero-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--gold);
 }
 
-/* More Info Button */
-.video-title button:nth-child(2) {
-    background-color: rgba(255, 255, 255, 0.2); /* Transparent white */
-    border: 1px solid white;
-    color: white;
+.hero-overview {
+    font-size: clamp(14px, 1.2vw, 17px);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.88);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+    margin-bottom: 24px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-/* More Info Button Hover */
-.video-title button:nth-child(2):hover {
-    background-color: rgba(255, 255, 255, 0.4);
-    transform: scale(1.07);
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-/* Tablet Responsiveness (No Position Changes) */
-@media (max-width: 1024px) {
-    .video-title {
-        width: 70%;              
-        left: 1%;              
-        top: 18%;
-        transform: translateY(0); 
-    }
-    
-    .video-title h1 {
-        font-size: 25px;
-    }
-    
-    .video-title button {
-        padding: 10px 18px;
-        font-size: 15px;    
-    }
+.hero-actions .btn {
+    height: 48px;
+    padding: 0 28px;
+    font-size: 17px;
 }
 
-/* Mobile Responsiveness (No Position Changes) */
+.hero-actions svg {
+    font-size: 22px;
+}
+
 @media (max-width: 768px) {
     .video-title {
-        display: none; /* Hide title on mobile */
+        bottom: 18%;
+    }
+
+    .hero-overview {
+        -webkit-line-clamp: 2;
+        margin-bottom: 18px;
+    }
+
+    .hero-actions .btn {
+        height: 44px;
+        padding: 0 20px;
+        font-size: 15px;
     }
 }

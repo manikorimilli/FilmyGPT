@@ -4,34 +4,36 @@ import { useSelector } from 'react-redux';
 import MoviesList from '../MoviesList/MoviesList';
 
 
-
-
 const GPTMovies = () => {
-  const movies=useSelector(store=>store.gpt.gptRecommendedMovies);
-  const shimmerUIVal=useSelector(store=>store.gpt.shimmerUI);
- 
+  const movies = useSelector(store => store.gpt.gptRecommendedMovies);
+  const shimmerUIVal = useSelector(store => store.gpt.shimmerUI);
 
-  const movieNames=movies?.movieNames;
-  const moviesInfo=movies?.moviesInfo;
+  const movieNames = movies?.movieNames;
+  const moviesInfo = movies?.moviesInfo;
+
+  if (shimmerUIVal) {
+    return (
+      <div className='gpt-movies'>
+        <p className='gpt-loading-text'>The show will begin shortly... 🍿</p>
+        <MoviesList title={""} movies={null} />
+      </div>
+    );
+  }
+
+  if (!movieNames) return null;
+
   return (
     <div className='gpt-movies'>
-      {movieNames &&
-        movieNames.map((movieName,index)=><MoviesList key={index} title={movieName} movies={moviesInfo[index]}/>)
-      }
-      { shimmerUIVal && <div className='shimmer-ui-section'> 
-        <h1>The show will begin shortly..🍿</h1>
-        <div className='shimmer-cards'>
-            <div className='section'></div>
-            <div className='section'></div>
-            <div className='section'></div>
-            <div className='section'></div>
-            <div className='section'></div>
-            <div className='section'></div>
-        </div>
-      </div>}
-     
+      <h2 className='gpt-results-heading'>Picked for you</h2>
+      {movieNames.map((movieName, index) => (
+        <MoviesList
+          key={movieName + index}
+          title={movieName}
+          movies={moviesInfo[index]}
+          emptyText={`We couldn't find "${movieName}" on TMDB.`}
+        />
+      ))}
     </div>
-    
   )
 }
 

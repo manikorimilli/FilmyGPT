@@ -1,62 +1,180 @@
-.watch-player-component-white{
-    
-    background-color: white;
-
-}
-.watch-player-component-black{
-    background-color: black;
+.watch-page {
+    position: relative;
+    min-height: 100vh;
+    background: var(--bg);
+    overflow: hidden;
 }
 
-.watch-player-header {
+/* soft, blurred glow of the movie's backdrop behind the player */
+.watch-ambient {
     position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    height: 90vh;
+    background-size: cover;
+    background-position: center;
+    filter: blur(80px) saturate(1.4);
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.watch-ambient::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(8, 8, 11, 0) 40%, var(--bg) 100%);
+}
+
+.watch-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: calc(var(--header-h) + 16px) var(--gutter) 64px;
+}
+
+.watch-player-frame {
+    position: relative;
     width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 30px;
-
-}
-
-.wow-btn {
-    background: linear-gradient(90deg, #ff6a00, #ee0979);
-    border: none;
-    color: white;
-    padding: 9px 12px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0px 4px 10px rgba(255, 105, 180, 0.3);
-    margin: 0px 5px;
-    
-    
-}
-
-.wow-btn:hover {
-    background: linear-gradient(90deg, #ee0979, #ff6a00);
-    transform: scale(1.05);
-    box-shadow: 0px 6px 15px rgba(255, 105, 180, 0.4);
-}
-
-.watch-player-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
-
-    /* border: solid green 2px; */
+    aspect-ratio: 16 / 9;
+    max-height: 78vh;
+    margin: 0 auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border);
 }
 
 .watch-player {
-    width: 90%;
-    height: 85vh;
-    max-width: 1440px; 
-    max-height: 810px;   
+    width: 100%;
+    height: 100%;
     border: none;
-    border-radius: 12px;
-    box-shadow: 0px 10px 30px rgba(255, 255, 255, 0.2);
-    margin-top: 30px;
+    display: block;
+}
+
+.watch-player-placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+}
+
+.watch-player-placeholder.is-empty img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+}
+
+.watch-empty-message {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    padding: 0 16px;
+}
+
+.watch-empty-message svg {
+    font-size: 40px;
+}
+
+.watch-details {
+    display: flex;
+    gap: 32px;
+    margin-top: 40px;
+    animation: rise-in 0.5s var(--ease);
+}
+
+.watch-poster {
+    flex-shrink: 0;
+    width: 180px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+}
+
+.watch-info {
+    min-width: 0;
+}
+
+.watch-info h1 {
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.watch-tagline {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 16px;
+}
+
+.watch-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.watch-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.watch-rating {
+    color: var(--gold);
+}
+
+.watch-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.watch-genres span {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.watch-overview {
+    margin-top: 20px;
+    max-width: 760px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.86);
+}
+
+@media (max-width: 640px) {
+    .watch-player-frame {
+        border-radius: var(--radius);
+    }
+
+    .watch-details {
+        gap: 18px;
+        margin-top: 28px;
+    }
+
+    .watch-poster {
+        width: 96px;
+    }
 }

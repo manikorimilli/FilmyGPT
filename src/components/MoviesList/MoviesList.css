@@ -1,14 +1,91 @@
-.movie-list{
-    padding: 10px;
-}
-.movie-list h1{
-    margin-left:11px;
+.movie-list {
+    position: relative;
+    padding: 0 0 12px;
 }
 
-.movie-card-section{
+.movie-list-title {
+    padding: 0 var(--gutter);
+    margin-bottom: 4px;
+    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+}
+
+.movie-list-rail {
+    position: relative;
+}
+
+.movie-card-section {
     display: flex;
-    overflow-x: scroll;
+    gap: clamp(8px, 1vw, 14px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scroll-padding: 0 var(--gutter);
     scrollbar-width: none;
-    
+    /* vertical padding keeps the hover lift from being clipped */
+    padding: 16px var(--gutter) 20px;
+}
 
+.movie-card-section::-webkit-scrollbar {
+    display: none;
+}
+
+.rail-arrow {
+    position: absolute;
+    top: 16px;
+    bottom: 20px;
+    z-index: 5;
+    width: var(--gutter);
+    min-width: 44px;
+    display: grid;
+    place-items: center;
+    border: none;
+    font-size: 30px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.rail-arrow.is-left {
+    left: 0;
+    background: linear-gradient(to right, rgba(8, 8, 11, 0.95), rgba(8, 8, 11, 0));
+}
+
+.rail-arrow.is-right {
+    right: 0;
+    background: linear-gradient(to left, rgba(8, 8, 11, 0.95), rgba(8, 8, 11, 0));
+}
+
+.movie-list-rail:hover .rail-arrow,
+.rail-arrow:focus-visible {
+    opacity: 1;
+}
+
+.rail-arrow svg {
+    transition: transform 0.2s var(--ease);
+}
+
+.rail-arrow:hover svg {
+    transform: scale(1.25);
+}
+
+.skeleton-card {
+    background: linear-gradient(100deg, #15151b 30%, #1f1f27 50%, #15151b 70%);
+    background-size: 200% 100%;
+    animation: hero-shimmer 1.4s linear infinite;
+    border-radius: var(--radius-sm);
+}
+
+.movie-list-empty {
+    padding: 12px var(--gutter) 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+@media (hover: none) {
+    .rail-arrow {
+        display: none;
+    }
 }

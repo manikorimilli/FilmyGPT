@@ -1,30 +1,30 @@
 .secondary-browse {
     position: relative;
-    margin-top: -260px; /* Default for larger screens */
-    width: 100%;
-    color: white;
-    z-index: 10; /* Ensure it stays on top */
-    /* border: solid blue 2px; */
-    background-color: transparent
+    z-index: 10;
+    margin-top: calc(var(--hero-overlap, 10vw) * -1);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 1.5vw, 20px);
+    color: var(--text);
 }
 
-/* For tablets (width < 1024px), reduce the margin */
-@media (max-width: 1024px) {
-    .secondary-browse {
-        margin-top: -120px;
-    }
+.browse-footer {
+    margin-top: 40px;
+    padding: 32px var(--gutter) 48px;
+    border-top: 1px solid var(--border);
+    color: var(--text-subtle);
+    font-size: 13px;
+    line-height: 1.6;
 }
 
-/* For mobile screens (width < 768px), reduce even more */
+.browse-footer p:first-child {
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
 @media (max-width: 768px) {
     .secondary-browse {
-        margin-top: -80px;
-    }
-}
-
-/* For very small phones (width < 480px), minimize overlap */
-@media (max-width: 480px) {
-    .secondary-browse {
-        margin-top: -50px;
+        --hero-overlap: 48px;
     }
 }

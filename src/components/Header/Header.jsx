@@ -1,76 +1,109 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./Header.css"
 import profile from "../../assets/profile.jpg"
-import { useNavigate } from 'react-router-dom'
-import {signOut } from "firebase/auth";
-import {auth} from "../../utils/firebase";
 import logo from "../../assets/logo.png"
+import { useNavigate } from 'react-router-dom'
+import { signOut } from "firebase/auth";
+import { auth } from "../../utils/firebase";
 import { useDispatch, useSelector } from 'react-redux';
-import {onAuthStateChanged } from "firebase/auth";
-import { addUser, removeUser } from '../../redux/userSlice';
-import { toogleGPT } from '../../redux/gptSlice';
+import { closeGPT, toogleGPT } from '../../redux/gptSlice';
+import { IoSparkles, IoHome, IoChevronDown, IoLogOutOutline, IoArrowBack } from "react-icons/io5";
 
+const Header = ({ showBack = false }) => {
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const userFound = useSelector(store => store.user);
+  const gptVal = useSelector(store => store.gpt.toogleGPTSearch);
 
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
-const Header = () => {
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    
+  // close the profile menu on outside click or Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    const handleKey = (e) => e.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [menuOpen]);
 
-    
-    const navigate=useNavigate();
+  const handleLogoClick = () => {
+    if (!userFound) return;
+    dispatch(closeGPT());
+    navigate("/browse");
+  }
 
-    const userFound=useSelector(store=>store.user);
-   
+  const handleSignoutAuth = () => {
+    setMenuOpen(false);
+    signOut(auth);
+  }
 
-    const dispatch=useDispatch();
-    const gptVal=useSelector(store=>store.gpt.toogleGPTSearch);
-    const handleGPTSearch=()=>{
-      dispatch(toogleGPT());
-    }
-   
+  const displayName = userFound?.displayName || userFound?.email?.split("@")[0];
 
-    const handleSignoutAuth=()=>{
-      const confirmLogout = window.confirm("Are you sure you want to logout?"); 
-      if(confirmLogout){
+  return (
+    <header className={`browse-header ${scrolled || !userFound ? "" : "is-transparent"} ${scrolled ? "is-scrolled" : ""}`}>
+      <button className='logo-button' onClick={handleLogoClick} aria-label='FilmyGPT home' disabled={!userFound}>
+        <img src={logo} alt='FilmyGPT' className='logo' />
+      </button>
 
-      
-        signOut(auth).then(() => {
-         
-          }).catch((error) => {
-            
-          });    
-    } }
-    
+      {userFound && (
+        <div className='header-actions'>
+          {showBack ? (
+            <button className='header-pill' onClick={() => navigate("/browse")}>
+              <IoArrowBack /> <span>Back to browse</span>
+            </button>
+          ) : (
+            <button className={`header-pill ${gptVal ? "" : "is-accent"}`} onClick={() => dispatch(toogleGPT())}>
+              {gptVal ? <><IoHome /> <span>Home</span></> : <><IoSparkles /> <span>GPT Search</span></>}
+            </button>
+          )}
 
-        useEffect(()=>{
-          const unsubscribe=onAuthStateChanged(auth, (user) => {
-            if (user) {  
-              const {uid:uid,email:email} = auth.currentUser;
-              dispatch(addUser({uid:uid,email:email}));
-              navigate("/browse");
+          <div className='profile-menu' ref={menuRef}>
+            <button
+              className='profile-trigger'
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-haspopup='menu'
+              aria-expanded={menuOpen}
+              aria-label='Account menu'
+            >
+              <img src={profile} className='profile-icon' alt='' />
+              <IoChevronDown className={`chevron ${menuOpen ? "is-open" : ""}`} />
+            </button>
 
-            } else {
-              dispatch(removeUser());
-              navigate("/");
-             
-            }
-          });
-
-          return ()=>unsubscribe();
-
-        },[]);
-        
-
-    return (
-    <div className='browse-header'>
-     {!userFound && <div className='logo-image'><img src={logo} alt='logo' className='logo'></img></div>}
-     {userFound && <div className='profile-img'>
-      <button className='gpt-search-btn' onClick={handleGPTSearch}>{!gptVal ? "GPT Search🪄": "Home Page🏠"}</button>
-      <img onClick={handleSignoutAuth}src={profile} className='profile-icon'  alt='profile-icon'></img>
-      </div>}
-    </div>
+            {menuOpen && (
+              <div className='profile-dropdown' role='menu'>
+                <div className='profile-info'>
+                  <img src={profile} alt='' />
+                  <div>
+                    <p className='profile-name'>{displayName}</p>
+                    <p className='profile-email'>{userFound.email}</p>
+                  </div>
+                </div>
+                <button className='dropdown-item' role='menuitem' onClick={handleSignoutAuth}>
+                  <IoLogOutOutline /> Sign out
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </header>
   )
 }
 
